@@ -8,13 +8,16 @@
     "compile:build": "tsc --project tsconfig.build.json",
     "start": "npm run compile && node ./dist/index.js",
     "serve": "nodemon",
-    "codegen:generate": "graphql-codegen"
+    "codegen:generate": "graphql-codegen",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "set -a && source .env && set +a && prisma migrate dev"
   },
   "type": "module",
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.12.2",
+    "@prisma/client": "^6.10.1",
     "dotenv": "^16.5.0",
     "graphql": "^16.11.0",
     "graphql-middleware": "^6.1.35",
@@ -30,7 +33,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.16",
     "nodemon": "^3.1.9",
-    "prisma": "^6.8.2",
+    "prisma": "^6.10.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
