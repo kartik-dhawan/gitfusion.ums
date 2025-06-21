@@ -21,7 +21,7 @@ const authDefs = gql`
     token: String
   }
 
-  type UmsSignUpInput {
+  input UmsSignUpInput {
     username: String
     email: String!
     password: String!

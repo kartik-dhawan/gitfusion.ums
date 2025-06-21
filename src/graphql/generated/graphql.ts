@@ -44,12 +44,11 @@ export type UmsLoginResponse = {
 };
 
 export type UmsSignUpInput = {
-  __typename?: 'UmsSignUpInput';
-  email: Scalars['String']['output'];
-  firstName: Scalars['String']['output'];
-  lastName?: Maybe<Scalars['String']['output']>;
-  password: Scalars['String']['output'];
-  username?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['input'];
+  firstName: Scalars['String']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UmsUser = {
@@ -140,7 +139,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: ResolverTypeWrapper<UmsLoginResponse>;
-  UmsSignUpInput: ResolverTypeWrapper<UmsSignUpInput>;
+  UmsSignUpInput: UmsSignUpInput;
   UmsUser: ResolverTypeWrapper<UmsUser>;
 };
 
@@ -167,15 +166,6 @@ export type UmsLoginResponseResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UmsSignUpInputResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsSignUpInput'] = ResolversParentTypes['UmsSignUpInput']> = {
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type UmsUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsUser'] = ResolversParentTypes['UmsUser']> = {
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -190,7 +180,6 @@ export type UmsUserResolvers<ContextType = any, ParentType extends ResolversPare
 export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   UmsLoginResponse?: UmsLoginResponseResolvers<ContextType>;
-  UmsSignUpInput?: UmsSignUpInputResolvers<ContextType>;
   UmsUser?: UmsUserResolvers<ContextType>;
 };
 
