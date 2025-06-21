@@ -12,11 +12,10 @@ const logFormat = winston.format.printf((info) => {
   const errorMessage = JSON.stringify((info?.metadata as any)?.error);
   const payloadMessage = JSON.stringify((info?.metadata as any)?.payload);
 
-  return `${info.timestamp} ${info.level} [${info.service}] [${info.label}] - ${
-    info.message
-  } ${errorMessage ? "\nError Details: " + errorMessage + "\n" : ""}${
-    payloadMessage ? "Payload Details: " + payloadMessage : ""
-  } `;
+  // [${info.label}]
+  return `${info.timestamp} ${info.level} [${info.service}] - ${info.message} ${
+    errorMessage ? "\nError Details: " + errorMessage + "\n" : ""
+  }${payloadMessage ? "Payload Details: " + payloadMessage : ""} `;
 }); // define a log format, the `info` parameter contains all the keys we pass in `fillExcept` of winston.format.metadata
 
 const baseLogger = winston.createLogger({

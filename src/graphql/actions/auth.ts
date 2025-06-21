@@ -1,6 +1,11 @@
 import prisma from "../../prisma/index.ts";
 import supabase from "../../supabase/config.ts";
-import { UmsSignUpInput, UmsUser } from "../generated/graphql.ts";
+import {
+  UmsLoginInput,
+  UmsSignUpInput,
+  UmsUser,
+  UmsUserRole,
+} from "../generated/graphql.ts";
 
 export const userSignUpEmail = async (
   input: UmsSignUpInput
@@ -20,13 +25,40 @@ export const userSignUpEmail = async (
   if (error) throw error;
 
   return {
-    createdAt: new Date().toISOString(),
     email: input.email,
     firstName: input.firstName,
     id: data.user?.id!,
     lastName: input.lastName,
     username: input.username,
     role: input.role,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+};
+
+export const userLoginEmail = async (
+  input: UmsLoginInput
+): Promise<UmsUser> => {
+  const { email, password } = input;
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) throw error;
+
+  const user = await prisma.user.findUnique({
+    where: { id: data?.user?.id },
+  });
+
+  return {
+    id: user?.id ?? "",
+    email: user?.email ?? "",
+    username: user?.username ?? "",
+    createdAt: new Date(user?.createdAt!).toISOString(),
+    updatedAt: new Date(user?.updatedAt!).toISOString(),
+    role: user?.role as UmsUserRole,
   };
 };
 
