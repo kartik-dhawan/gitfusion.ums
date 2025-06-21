@@ -5,6 +5,7 @@ import logger from "../../winston.config.ts";
 import dotenv from "dotenv";
 import typeDefs from "./typeDefs/index.ts";
 import resolvers from "./resolvers/index.ts";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 const PORT = process.env.PORT ?? 4001; // Setting the port from environment variable or defaulting to 3002
 
@@ -18,25 +19,18 @@ const startServer = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
+  const rawSchema = makeExecutableSchema({ typeDefs, resolvers });
+
   // Creating a new Apollo Server instance with type definitions and resolvers
   const server = new ApolloServer({
-    typeDefs: typeDefs,
-    resolvers,
+    schema: rawSchema,
   });
 
   try {
     await server.start();
 
     // Setting up the GraphQL endpoint with middleware
-    app.use(
-      "/graphql",
-      expressMiddleware(server, {
-        context: async (params) => {
-          const { req, res } = params;
-          return { req, res };
-        },
-      })
-    );
+    app.use("/graphql", expressMiddleware(server));
 
     app.listen(PORT, () => {
       logger.common.info(

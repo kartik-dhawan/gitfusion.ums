@@ -9,6 +9,7 @@ const authDefs = gql`
     lastName: String
     createdAt: String!
     updatedAt: String
+    role: UmsUserRole!
   }
 
   input UmsLoginInput {
@@ -27,6 +28,13 @@ const authDefs = gql`
     password: String!
     firstName: String!
     lastName: String
+    role: UmsUserRole!
+  }
+
+  enum UmsUserRole {
+    ADMIN
+    GUEST
+    CLIENT
   }
 `;
 
