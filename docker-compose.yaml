@@ -3,11 +3,12 @@ services: # services: is the top-level key under which you list each container y
         image: postgres:15 # tells Docker to pull (or use if cached) the official Postgres v15 image, running on the small Alpine Linux base.
         restart: always # If the container ever stops (crash, host reboot, manual stop), Docker will automatically try to start it again.
         ports:
-            - "5433:5433" # Exposes port 5432 inside the container (Postgres’s default port) onto port 5432 on your host machine.
+            - "5434:5432" # Exposes port 5434 inside the container (Postgres’s default port) onto port 5432 on your host machine.
         environment:
             POSTGRES_USER:     ${DB_USER}
             POSTGRES_PASSWORD: ${DB_PASS}
             POSTGRES_DB:       ${DB_NAME} # You’ll connect with these credentials in your DATABASE_URL
+            PGADMIN_CONFIG_SECRET_KEY: "a-long-random-string-you-choose"
         networks:
             - db-net # all services which need to connect to each other to share resources must have same network
         volumes:
@@ -16,7 +17,7 @@ services: # services: is the top-level key under which you list each container y
         image: dpage/pgadmin4:latest # pulls this image for pg admin - can be found in docker hub
         restart: always
         ports:
-            - "8081:81"
+            - "8081:80"
         environment:
             PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWORD}

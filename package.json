@@ -10,7 +10,8 @@
     "serve": "nodemon",
     "codegen:generate": "graphql-codegen",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "set -a && source .env && set +a && prisma migrate dev"
+    "prisma:migrate": "set -a && source .env && set +a && prisma migrate dev",
+    "prisma:reset": "set -a && source .env && set +a && prisma migrate reset"
   },
   "type": "module",
   "author": "",
