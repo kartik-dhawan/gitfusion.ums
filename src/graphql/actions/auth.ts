@@ -14,7 +14,7 @@ import {
   UmsUser,
   UmsUserRole,
 } from "../generated/graphql.ts";
-import { PrismaSaveUserToDbType } from "../types/prisma.ts";
+import { PrismaSaveUserToDbType } from "../utils/interfaces/prisma.ts";
 import { Prisma } from "../../prisma/generated/index.js";
 
 const sessionToTokenMapper = (session?: Session | null): UmsTokens => ({

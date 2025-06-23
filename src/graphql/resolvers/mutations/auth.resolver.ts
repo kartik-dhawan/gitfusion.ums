@@ -6,12 +6,22 @@ import {
   userLoginEmail,
   userSignUpEmail,
 } from "../../actions/auth.ts";
+import schemaValidateOrThrow from "../../utils/validation/index.ts";
+import {
+  userSignInInputSchema,
+  userSignUpInputSchema,
+} from "../../utils/validation/inputSchema.ts";
 
 const authMutations: Resolvers["Mutation"] = {
   umsSignUpWithEmail: async (_, { input }) => {
+    const validatedPayload = await schemaValidateOrThrow(
+      userSignUpInputSchema,
+      input
+    );
+
     try {
       // signup using Supabase
-      const signUpResponse = await userSignUpEmail(input);
+      const signUpResponse = await userSignUpEmail(validatedPayload);
 
       // save user to postgres database
       const res = await saveUserToDatabase(signUpResponse.user);
@@ -33,8 +43,13 @@ const authMutations: Resolvers["Mutation"] = {
   },
 
   umsLoginWithEmail: async (_, { input }) => {
+    const validatedPayload = await schemaValidateOrThrow(
+      userSignInInputSchema,
+      input
+    );
+
     try {
-      const loginResponse = await userLoginEmail(input);
+      const loginResponse = await userLoginEmail(validatedPayload);
       return loginResponse;
     } catch (error) {
       throw new GraphQLError(
