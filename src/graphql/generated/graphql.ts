@@ -22,6 +22,12 @@ export type AssignPermissionsResponse = {
   role: UmsUserRole;
 };
 
+export type FetchUsersResponse = {
+  __typename?: 'FetchUsersResponse';
+  totalCount: Scalars['Int']['output'];
+  users: Array<UmsUser>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   umsAssignPermission?: Maybe<AssignPermissionsResponse>;
@@ -44,14 +50,29 @@ export type MutationUmsSignUpWithEmailArgs = {
   input: UmsSignUpInput;
 };
 
+export type PaginationInput = {
+  pageNumber: Scalars['Int']['input'];
+  pageSize: Scalars['Int']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  hello?: Maybe<Scalars['String']['output']>;
+  umsGetUsers?: Maybe<FetchUsersResponse>;
+};
+
+
+export type QueryUmsGetUsersArgs = {
+  input: UmsGetUsersInput;
 };
 
 export type UmsAssignPermsInput = {
   permissions: Array<UmsPermissions>;
   roleAlias: UmsUserRole;
+};
+
+export type UmsGetUsersInput = {
+  pagination?: InputMaybe<PaginationInput>;
+  search?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UmsLoginInput = {
@@ -190,12 +211,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   AssignPermissionsResponse: ResolverTypeWrapper<AssignPermissionsResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  FetchUsersResponse: ResolverTypeWrapper<FetchUsersResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  PaginationInput: PaginationInput;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UmsAssignPermsInput: UmsAssignPermsInput;
+  UmsGetUsersInput: UmsGetUsersInput;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: ResolverTypeWrapper<UmsLoginResponse>;
   UmsPermissions: UmsPermissions;
@@ -210,12 +234,15 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AssignPermissionsResponse: AssignPermissionsResponse;
   Boolean: Scalars['Boolean']['output'];
+  FetchUsersResponse: FetchUsersResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
+  PaginationInput: PaginationInput;
   Query: {};
   String: Scalars['String']['output'];
   UmsAssignPermsInput: UmsAssignPermsInput;
+  UmsGetUsersInput: UmsGetUsersInput;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: UmsLoginResponse;
   UmsSignUpInput: UmsSignUpInput;
@@ -230,6 +257,12 @@ export type AssignPermissionsResponseResolvers<ContextType = any, ParentType ext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FetchUsersResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FetchUsersResponse'] = ResolversParentTypes['FetchUsersResponse']> = {
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['UmsUser']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   umsAssignPermission?: Resolver<Maybe<ResolversTypes['AssignPermissionsResponse']>, ParentType, ContextType, RequireFields<MutationUmsAssignPermissionArgs, 'input'>>;
   umsLoginWithEmail?: Resolver<Maybe<ResolversTypes['UmsLoginResponse']>, ParentType, ContextType, RequireFields<MutationUmsLoginWithEmailArgs, 'input'>>;
@@ -237,7 +270,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  umsGetUsers?: Resolver<Maybe<ResolversTypes['FetchUsersResponse']>, ParentType, ContextType, RequireFields<QueryUmsGetUsersArgs, 'input'>>;
 };
 
 export type UmsLoginResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsLoginResponse'] = ResolversParentTypes['UmsLoginResponse']> = {
@@ -278,6 +311,7 @@ export type UmsUserResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type Resolvers<ContextType = any> = {
   AssignPermissionsResponse?: AssignPermissionsResponseResolvers<ContextType>;
+  FetchUsersResponse?: FetchUsersResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UmsLoginResponse?: UmsLoginResponseResolvers<ContextType>;

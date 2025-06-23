@@ -69,6 +69,16 @@ const authDefs = gql`
     permissions: [UmsPermissions!]!
     role: UmsUserRole!
   }
+
+  type FetchUsersResponse {
+    users: [UmsUser!]!
+    totalCount: Int!
+  }
+
+  input UmsGetUsersInput {
+    pagination: PaginationInput
+    search: String
+  }
 `;
 
 export default authDefs;

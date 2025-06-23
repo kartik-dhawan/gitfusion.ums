@@ -2,7 +2,9 @@ import { Session } from "@supabase/supabase-js";
 import prisma from "../../prisma/index.ts";
 import supabase from "../../supabase/config.ts";
 import {
+  FetchUsersResponse,
   UmsAssignPermsInput,
+  UmsGetUsersInput,
   UmsLoginInput,
   UmsLoginResponse,
   UmsPermissions,
@@ -13,6 +15,7 @@ import {
   UmsUserRole,
 } from "../generated/graphql.ts";
 import { PrismaSaveUserToDbType } from "../types/prisma.ts";
+import { Prisma } from "../../prisma/generated/index.js";
 
 const sessionToTokenMapper = (session?: Session | null): UmsTokens => ({
   accessToken: session?.access_token ?? "",
@@ -213,4 +216,74 @@ export const assignPermissionsToRole = async (
   });
 
   return perms.Permissions.map((perm) => perm.name as UmsPermissions);
+};
+
+export const fetchUsersFromDatabase = async (
+  input: UmsGetUsersInput
+): Promise<FetchUsersResponse> => {
+  const { pagination, search } = input; // search is by name only
+  const { pageNumber = 1, pageSize = 10 } = pagination || {};
+
+  // query to filter data
+  const query: Prisma.UserWhereInput | undefined = search
+    ? {
+        OR: [
+          {
+            firstName: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            lastName: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+          {
+            username: {
+              contains: search,
+              mode: "insensitive",
+            },
+          },
+        ],
+      }
+    : undefined;
+
+  const usersData = await prisma.user.findMany({
+    include: {
+      roleData: {
+        include: {
+          Permissions: {
+            select: { name: true },
+          },
+        },
+      },
+    },
+    where: query,
+    skip: (pageNumber - 1) * pageSize,
+    take: pageSize,
+  });
+
+  const users: UmsUser[] = usersData.map((user) => ({
+    id: user.id,
+    email: user.email,
+    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    createdAt: new Date(user.createdAt!).toISOString(),
+    updatedAt: new Date(user.updatedAt!).toISOString(),
+    role: user.role as UmsUserRole,
+    permissions: user.roleData.Permissions.map(
+      (perm) => perm.name as UmsPermissions
+    ),
+  }));
+
+  return {
+    // explicitly counting total users matching the query, excluding pagination
+    totalCount: await prisma.user.count({
+      where: query,
+    }),
+    users: users,
+  };
 };
