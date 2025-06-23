@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql";
 import { Resolvers } from "../../generated/graphql.ts";
 import {
+  assignPermissionsToRole,
   saveUserToDatabase,
   userLoginEmail,
   userSignUpEmail,
@@ -22,10 +23,25 @@ const authMutations: Resolvers["Mutation"] = {
       );
     }
   },
+
   umsLoginWithEmail: async (_, { input }) => {
     try {
       const loginResponse = await userLoginEmail(input);
       return loginResponse;
+    } catch (error) {
+      throw new GraphQLError(
+        error instanceof Error ? error.message : String(error)
+      );
+    }
+  },
+
+  umsAssignPermission: async (_, { input }) => {
+    try {
+      const permissionRes = await assignPermissionsToRole(input);
+      return {
+        permissions: permissionRes,
+        role: input.roleAlias,
+      };
     } catch (error) {
       throw new GraphQLError(
         error instanceof Error ? error.message : String(error)

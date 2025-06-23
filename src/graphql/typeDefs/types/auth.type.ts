@@ -51,6 +51,23 @@ const authDefs = gql`
     GUEST
     CLIENT
   }
+
+  enum UmsPermissions {
+    CREATE_USER
+    READ_USER
+    DELETE_USER
+    EDIT_USER
+  }
+
+  input UmsAssignPermsInput {
+    roleAlias: UmsUserRole!
+    permissions: [UmsPermissions!]!
+  }
+
+  type AssignPermissionsResponse {
+    permissions: [UmsPermissions!]!
+    role: UmsUserRole!
+  }
 `;
 
 export default authDefs;

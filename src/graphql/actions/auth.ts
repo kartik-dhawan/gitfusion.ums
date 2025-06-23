@@ -2,8 +2,10 @@ import { Session } from "@supabase/supabase-js";
 import prisma from "../../prisma/index.ts";
 import supabase from "../../supabase/config.ts";
 import {
+  UmsAssignPermsInput,
   UmsLoginInput,
   UmsLoginResponse,
+  UmsPermissions,
   UmsSignUpInput,
   UmsSignUpResponse,
   UmsTokens,
@@ -107,4 +109,33 @@ export const saveUserToDatabase = async (user: UmsUser) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const assignPermissionsToRole = async (
+  payload: UmsAssignPermsInput
+): Promise<UmsPermissions[]> => {
+  const { permissions, roleAlias } = payload;
+
+  await prisma.permissions.createMany({
+    data: permissions.map((permission) => ({
+      name: permission,
+    })),
+    skipDuplicates: true,
+  });
+
+  const perms = await prisma.roles.update({
+    where: { alias: roleAlias },
+    data: {
+      Permissions: {
+        connect: permissions.map((permission) => ({
+          name: permission,
+        })),
+      },
+    },
+    select: {
+      Permissions: true,
+    },
+  });
+
+  return perms.Permissions.map((perm) => perm.name as UmsPermissions);
 };

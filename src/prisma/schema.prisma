@@ -21,10 +21,17 @@ model User {
 }
 
 model Roles {
-  id        String  @id @default(uuid())
-  name      String  @unique
-  alias     String  @unique
-  createdAt String?
-  updatedAt String?
-  User      User[]  @relation("user-roles")
+  id          String        @id @default(uuid())
+  name        String        @unique
+  alias       String        @unique
+  createdAt   String?
+  updatedAt   String?
+  User        User[]        @relation("user-roles")
+  Permissions Permissions[] @relation("role-permissions")
+}
+
+model Permissions {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  Roles Roles[] @relation("role-permissions")
 }

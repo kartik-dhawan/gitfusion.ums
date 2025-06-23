@@ -16,10 +16,22 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AssignPermissionsResponse = {
+  __typename?: 'AssignPermissionsResponse';
+  permissions: Array<UmsPermissions>;
+  role: UmsUserRole;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  umsAssignPermission?: Maybe<AssignPermissionsResponse>;
   umsLoginWithEmail?: Maybe<UmsLoginResponse>;
   umsSignUpWithEmail?: Maybe<UmsSignUpResponse>;
+};
+
+
+export type MutationUmsAssignPermissionArgs = {
+  input: UmsAssignPermsInput;
 };
 
 
@@ -37,6 +49,11 @@ export type Query = {
   hello?: Maybe<Scalars['String']['output']>;
 };
 
+export type UmsAssignPermsInput = {
+  permissions: Array<UmsPermissions>;
+  roleAlias: UmsUserRole;
+};
+
 export type UmsLoginInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -47,6 +64,13 @@ export type UmsLoginResponse = {
   token: UmsTokens;
   user: UmsUser;
 };
+
+export enum UmsPermissions {
+  CreateUser = 'CREATE_USER',
+  DeleteUser = 'DELETE_USER',
+  EditUser = 'EDIT_USER',
+  ReadUser = 'READ_USER'
+}
 
 export type UmsSignUpInput = {
   email: Scalars['String']['input'];
@@ -163,14 +187,17 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AssignPermissionsResponse: ResolverTypeWrapper<AssignPermissionsResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UmsAssignPermsInput: UmsAssignPermsInput;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: ResolverTypeWrapper<UmsLoginResponse>;
+  UmsPermissions: UmsPermissions;
   UmsSignUpInput: UmsSignUpInput;
   UmsSignUpResponse: ResolverTypeWrapper<UmsSignUpResponse>;
   UmsTokens: ResolverTypeWrapper<UmsTokens>;
@@ -180,12 +207,14 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AssignPermissionsResponse: AssignPermissionsResponse;
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
+  UmsAssignPermsInput: UmsAssignPermsInput;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: UmsLoginResponse;
   UmsSignUpInput: UmsSignUpInput;
@@ -194,7 +223,14 @@ export type ResolversParentTypes = {
   UmsUser: UmsUser;
 };
 
+export type AssignPermissionsResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AssignPermissionsResponse'] = ResolversParentTypes['AssignPermissionsResponse']> = {
+  permissions?: Resolver<Array<ResolversTypes['UmsPermissions']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['UmsUserRole'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  umsAssignPermission?: Resolver<Maybe<ResolversTypes['AssignPermissionsResponse']>, ParentType, ContextType, RequireFields<MutationUmsAssignPermissionArgs, 'input'>>;
   umsLoginWithEmail?: Resolver<Maybe<ResolversTypes['UmsLoginResponse']>, ParentType, ContextType, RequireFields<MutationUmsLoginWithEmailArgs, 'input'>>;
   umsSignUpWithEmail?: Resolver<Maybe<ResolversTypes['UmsSignUpResponse']>, ParentType, ContextType, RequireFields<MutationUmsSignUpWithEmailArgs, 'input'>>;
 };
@@ -239,6 +275,7 @@ export type UmsUserResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type Resolvers<ContextType = any> = {
+  AssignPermissionsResponse?: AssignPermissionsResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UmsLoginResponse?: UmsLoginResponseResolvers<ContextType>;
