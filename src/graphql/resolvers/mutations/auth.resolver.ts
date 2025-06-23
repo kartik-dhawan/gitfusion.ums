@@ -1,23 +1,21 @@
 import { GraphQLError } from "graphql";
-import { Resolvers, UmsUser, UmsUserRole } from "../../generated/graphql.ts";
+import { Resolvers } from "../../generated/graphql.ts";
 import {
   saveUserToDatabase,
   userLoginEmail,
   userSignUpEmail,
 } from "../../actions/auth.ts";
-import supabase from "../../../supabase/config.ts";
-import prisma from "../../../prisma/index.ts";
 
 const authMutations: Resolvers["Mutation"] = {
   umsSignUpWithEmail: async (_, { input }) => {
     try {
       // signup using Supabase
-      const response = await userSignUpEmail(input);
+      const signUpResponse = await userSignUpEmail(input);
 
       // save user to postgres database
-      await saveUserToDatabase(response);
+      await saveUserToDatabase(signUpResponse.user);
 
-      return response;
+      return signUpResponse;
     } catch (error) {
       throw new GraphQLError(
         error instanceof Error ? error.message : String(error)
@@ -26,8 +24,8 @@ const authMutations: Resolvers["Mutation"] = {
   },
   umsLoginWithEmail: async (_, { input }) => {
     try {
-      const user = await userLoginEmail(input);
-      return user;
+      const loginResponse = await userLoginEmail(input);
+      return loginResponse;
     } catch (error) {
       throw new GraphQLError(
         error instanceof Error ? error.message : String(error)

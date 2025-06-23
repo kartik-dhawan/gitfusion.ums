@@ -17,9 +17,24 @@ const authDefs = gql`
     password: String!
   }
 
+  type UmsTokens {
+    accessToken: String!
+    refreshToken: String
+    expiration: Int!
+    expiresIn: Int
+    providerToken: String
+    providerRefreshToken: String
+    tokenType: String
+  }
+
   type UmsLoginResponse {
-    user: UmsUser
-    token: String
+    user: UmsUser!
+    token: UmsTokens!
+  }
+
+  type UmsSignUpResponse {
+    user: UmsUser!
+    token: UmsTokens!
   }
 
   input UmsSignUpInput {

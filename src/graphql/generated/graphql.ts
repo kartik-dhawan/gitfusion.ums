@@ -18,8 +18,8 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  umsLoginWithEmail?: Maybe<UmsUser>;
-  umsSignUpWithEmail?: Maybe<UmsUser>;
+  umsLoginWithEmail?: Maybe<UmsLoginResponse>;
+  umsSignUpWithEmail?: Maybe<UmsSignUpResponse>;
 };
 
 
@@ -44,8 +44,8 @@ export type UmsLoginInput = {
 
 export type UmsLoginResponse = {
   __typename?: 'UmsLoginResponse';
-  token?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<UmsUser>;
+  token: UmsTokens;
+  user: UmsUser;
 };
 
 export type UmsSignUpInput = {
@@ -55,6 +55,23 @@ export type UmsSignUpInput = {
   password: Scalars['String']['input'];
   role: UmsUserRole;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UmsSignUpResponse = {
+  __typename?: 'UmsSignUpResponse';
+  token: UmsTokens;
+  user: UmsUser;
+};
+
+export type UmsTokens = {
+  __typename?: 'UmsTokens';
+  accessToken: Scalars['String']['output'];
+  expiration: Scalars['Int']['output'];
+  expiresIn?: Maybe<Scalars['Int']['output']>;
+  providerRefreshToken?: Maybe<Scalars['String']['output']>;
+  providerToken?: Maybe<Scalars['String']['output']>;
+  refreshToken?: Maybe<Scalars['String']['output']>;
+  tokenType?: Maybe<Scalars['String']['output']>;
 };
 
 export type UmsUser = {
@@ -148,12 +165,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: ResolverTypeWrapper<UmsLoginResponse>;
   UmsSignUpInput: UmsSignUpInput;
+  UmsSignUpResponse: ResolverTypeWrapper<UmsSignUpResponse>;
+  UmsTokens: ResolverTypeWrapper<UmsTokens>;
   UmsUser: ResolverTypeWrapper<UmsUser>;
   UmsUserRole: UmsUserRole;
 };
@@ -162,18 +182,21 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: UmsLoginResponse;
   UmsSignUpInput: UmsSignUpInput;
+  UmsSignUpResponse: UmsSignUpResponse;
+  UmsTokens: UmsTokens;
   UmsUser: UmsUser;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  umsLoginWithEmail?: Resolver<Maybe<ResolversTypes['UmsUser']>, ParentType, ContextType, RequireFields<MutationUmsLoginWithEmailArgs, 'input'>>;
-  umsSignUpWithEmail?: Resolver<Maybe<ResolversTypes['UmsUser']>, ParentType, ContextType, RequireFields<MutationUmsSignUpWithEmailArgs, 'input'>>;
+  umsLoginWithEmail?: Resolver<Maybe<ResolversTypes['UmsLoginResponse']>, ParentType, ContextType, RequireFields<MutationUmsLoginWithEmailArgs, 'input'>>;
+  umsSignUpWithEmail?: Resolver<Maybe<ResolversTypes['UmsSignUpResponse']>, ParentType, ContextType, RequireFields<MutationUmsSignUpWithEmailArgs, 'input'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -181,8 +204,25 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type UmsLoginResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsLoginResponse'] = ResolversParentTypes['UmsLoginResponse']> = {
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['UmsUser']>, ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['UmsTokens'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['UmsUser'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UmsSignUpResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsSignUpResponse'] = ResolversParentTypes['UmsSignUpResponse']> = {
+  token?: Resolver<ResolversTypes['UmsTokens'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['UmsUser'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UmsTokensResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsTokens'] = ResolversParentTypes['UmsTokens']> = {
+  accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  expiration?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  expiresIn?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  providerRefreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  providerToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  refreshToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tokenType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -202,6 +242,8 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   UmsLoginResponse?: UmsLoginResponseResolvers<ContextType>;
+  UmsSignUpResponse?: UmsSignUpResponseResolvers<ContextType>;
+  UmsTokens?: UmsTokensResolvers<ContextType>;
   UmsUser?: UmsUserResolvers<ContextType>;
 };
 

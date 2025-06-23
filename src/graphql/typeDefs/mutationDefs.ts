@@ -2,8 +2,8 @@ import { gql } from "graphql-tag";
 
 const mutationDefs = gql`
   type Mutation {
-    umsSignUpWithEmail(input: UmsSignUpInput!): UmsUser
-    umsLoginWithEmail(input: UmsLoginInput!): UmsUser
+    umsSignUpWithEmail(input: UmsSignUpInput!): UmsSignUpResponse
+    umsLoginWithEmail(input: UmsLoginInput!): UmsLoginResponse
   }
 `;
 
