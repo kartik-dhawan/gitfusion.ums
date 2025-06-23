@@ -1,9 +1,9 @@
-import { fetchUsersFromDatabase } from "../../actions/auth.ts";
+import { fetchUsersFromDatabase } from "../../actions/user.ts";
 import { Resolvers } from "../../generated/graphql.ts";
 import schemaValidateOrThrow from "../../utils/validation/index.ts";
 import { fetchUsersInputSchema } from "../../utils/validation/inputSchema.ts";
 
-const authQueries: Resolvers["Query"] = {
+const userQueries: Resolvers["Query"] = {
   umsGetUsers: async (_, { input }) => {
     const validatedPayload = await schemaValidateOrThrow(
       fetchUsersInputSchema,
@@ -19,4 +19,4 @@ const authQueries: Resolvers["Query"] = {
   },
 };
 
-export default authQueries;
+export default userQueries;
