@@ -17,4 +17,14 @@ model User {
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   role      String
+  roleData  Roles     @relation("user-roles", fields: [role], references: [alias])
+}
+
+model Roles {
+  id        String  @id @default(uuid())
+  name      String  @unique
+  alias     String  @unique
+  createdAt String?
+  updatedAt String?
+  User      User[]  @relation("user-roles")
 }

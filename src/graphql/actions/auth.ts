@@ -94,10 +94,14 @@ export const saveUserToDatabase = async (user: UmsUser) => {
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
-        role: user.role,
         id: user.id,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        roleData: {
+          connect: {
+            alias: user.role,
+          },
+        },
       },
     });
   } catch (error) {
