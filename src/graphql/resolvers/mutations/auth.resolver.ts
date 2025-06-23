@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { Resolvers } from "../../generated/graphql.ts";
+import { Resolvers, UmsPermissions } from "../../generated/graphql.ts";
 import {
   assignPermissionsToRole,
   saveUserToDatabase,
@@ -14,9 +14,17 @@ const authMutations: Resolvers["Mutation"] = {
       const signUpResponse = await userSignUpEmail(input);
 
       // save user to postgres database
-      await saveUserToDatabase(signUpResponse.user);
+      const res = await saveUserToDatabase(signUpResponse.user);
 
-      return signUpResponse;
+      return {
+        ...signUpResponse,
+        user: {
+          ...signUpResponse.user,
+          permissions: res.roleData.Permissions.map(
+            (p) => p.name as UmsPermissions
+          ),
+        },
+      };
     } catch (error) {
       throw new GraphQLError(
         error instanceof Error ? error.message : String(error)

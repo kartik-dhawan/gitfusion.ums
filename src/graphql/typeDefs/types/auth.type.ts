@@ -10,6 +10,7 @@ const authDefs = gql`
     createdAt: String!
     updatedAt: String
     role: UmsUserRole!
+    permissions: [UmsPermissions!]!
   }
 
   input UmsLoginInput {

@@ -105,6 +105,7 @@ export type UmsUser = {
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
+  permissions: Array<UmsPermissions>;
   role: UmsUserRole;
   updatedAt?: Maybe<Scalars['String']['output']>;
   username?: Maybe<Scalars['String']['output']>;
@@ -268,6 +269,7 @@ export type UmsUserResolvers<ContextType = any, ParentType extends ResolversPare
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  permissions?: Resolver<Array<ResolversTypes['UmsPermissions']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['UmsUserRole'], ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

@@ -52,6 +52,7 @@ export const userSignUpEmail = async (
       role: input.role,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      permissions: [], // Permissions are not assigned during signup
     },
     token: sessionToTokenMapper(session),
   };
@@ -73,6 +74,13 @@ export const userLoginEmail = async (
 
   const user = await prisma.user.findUnique({
     where: { id: session?.user?.id },
+    include: {
+      roleData: {
+        select: {
+          Permissions: true,
+        },
+      },
+    },
   });
 
   return {
@@ -83,6 +91,12 @@ export const userLoginEmail = async (
       createdAt: new Date(user?.createdAt!).toISOString(),
       updatedAt: new Date(user?.updatedAt!).toISOString(),
       role: user?.role as UmsUserRole,
+      firstName: user?.firstName ?? "",
+      lastName: user?.lastName ?? "",
+      permissions:
+        user?.roleData?.Permissions.map(
+          (perm) => perm.name as UmsPermissions
+        ) ?? [],
     },
     token: sessionToTokenMapper(session),
   };
@@ -90,7 +104,7 @@ export const userLoginEmail = async (
 
 export const saveUserToDatabase = async (user: UmsUser) => {
   try {
-    await prisma.user.create({
+    return await prisma.user.create({
       data: {
         email: user.email,
         firstName: user.firstName,
@@ -102,6 +116,13 @@ export const saveUserToDatabase = async (user: UmsUser) => {
         roleData: {
           connect: {
             alias: user.role,
+          },
+        },
+      },
+      select: {
+        roleData: {
+          select: {
+            Permissions: true,
           },
         },
       },
