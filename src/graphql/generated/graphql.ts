@@ -69,7 +69,13 @@ export type PaginationInput = {
 
 export type Query = {
   __typename?: 'Query';
-  umsGetUsers?: Maybe<FetchUsersResponse>;
+  umsGetUser?: Maybe<UmsUser>;
+  umsGetUsers: FetchUsersResponse;
+};
+
+
+export type QueryUmsGetUserArgs = {
+  userId: Scalars['String']['input'];
 };
 
 
@@ -299,7 +305,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  umsGetUsers?: Resolver<Maybe<ResolversTypes['FetchUsersResponse']>, ParentType, ContextType, RequireFields<QueryUmsGetUsersArgs, 'input'>>;
+  umsGetUser?: Resolver<Maybe<ResolversTypes['UmsUser']>, ParentType, ContextType, RequireFields<QueryUmsGetUserArgs, 'userId'>>;
+  umsGetUsers?: Resolver<ResolversTypes['FetchUsersResponse'], ParentType, ContextType, RequireFields<QueryUmsGetUsersArgs, 'input'>>;
 };
 
 export type UmsLoginResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsLoginResponse'] = ResolversParentTypes['UmsLoginResponse']> = {

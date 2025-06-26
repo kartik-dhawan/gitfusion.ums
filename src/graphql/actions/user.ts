@@ -1,6 +1,6 @@
 import { Prisma } from "../../prisma/generated/index.js";
 import prisma from "../../prisma/index.ts";
-import supabase from "../../supabase/config.ts";
+import supabase, { supabaseAdmin } from "../../supabase/config.ts";
 import {
   UmsGetUsersInput,
   FetchUsersResponse,
@@ -118,5 +118,42 @@ export const deleteUserFromDatabase = async (userId: string): Promise<void> => {
 };
 
 export const deleteUserFromSupabase = async (userId: string): Promise<void> => {
-  await supabase.auth.admin.deleteUser(userId);
+  const { error } = await supabaseAdmin.auth.admin.deleteUser(userId);
+
+  if (error) {
+    throw error;
+  }
+};
+
+export const fetchUserById = async (
+  userId: string
+): Promise<Partial<UmsUser | null>> => {
+  const response = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    include: {
+      roleData: {
+        include: {
+          Permissions: true,
+        },
+      },
+    },
+  });
+
+  const user = {
+    id: response?.id,
+    email: response?.email,
+    username: response?.username,
+    firstName: response?.firstName,
+    lastName: response?.lastName,
+    createdAt: new Date(response?.createdAt!).toISOString(),
+    updatedAt: new Date(response?.updatedAt!).toISOString(),
+    role: response?.role as UmsUserRole,
+    permissions: response?.roleData.Permissions.map(
+      (perm) => perm.name as UmsPermissions
+    ),
+  };
+
+  return user;
 };
