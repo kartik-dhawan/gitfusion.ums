@@ -1,5 +1,6 @@
 import { Prisma } from "../../prisma/generated/index.js";
 import prisma from "../../prisma/index.ts";
+import supabase from "../../supabase/config.ts";
 import {
   UmsGetUsersInput,
   FetchUsersResponse,
@@ -106,4 +107,16 @@ export const assignPermissionsToRole = async (
   });
 
   return perms.Permissions.map((perm) => perm.name as UmsPermissions);
+};
+
+export const deleteUserFromDatabase = async (userId: string): Promise<void> => {
+  await prisma.user.delete({
+    where: {
+      id: userId,
+    },
+  });
+};
+
+export const deleteUserFromSupabase = async (userId: string): Promise<void> => {
+  await supabase.auth.admin.deleteUser(userId);
 };

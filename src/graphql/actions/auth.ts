@@ -2,9 +2,6 @@ import { Session } from "@supabase/supabase-js";
 import prisma from "../../prisma/index.ts";
 import supabase from "../../supabase/config.ts";
 import {
-  FetchUsersResponse,
-  UmsAssignPermsInput,
-  UmsGetUsersInput,
   UmsLoginInput,
   UmsLoginResponse,
   UmsPermissions,
@@ -15,7 +12,7 @@ import {
   UmsUserRole,
 } from "../generated/graphql.ts";
 import { PrismaSaveUserToDbType } from "../utils/interfaces/prisma.ts";
-import { Prisma } from "../../prisma/generated/index.js";
+import { responseMessages } from "../utils/messages.ts";
 
 const sessionToTokenMapper = (session?: Session | null): UmsTokens => ({
   accessToken: session?.access_token ?? "",
@@ -59,6 +56,7 @@ export const userSignUpEmail = async (
       permissions: [], // Permissions are not assigned during signup
     },
     token: sessionToTokenMapper(session),
+    message: responseMessages.USER.CREATION_SUCCESS,
   };
 };
 
@@ -125,6 +123,7 @@ export const userLoginEmail = async (
           ) ?? [],
       },
       token: sessionToTokenMapper(session),
+      message: responseMessages.USER.SIGN_IN_SUCCESS,
     };
   }
 
@@ -146,6 +145,7 @@ export const userLoginEmail = async (
         ) ?? [],
     },
     token: sessionToTokenMapper(session),
+    message: responseMessages.USER.SIGN_IN_SUCCESS,
   };
 };
 

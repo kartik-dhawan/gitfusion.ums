@@ -22,6 +22,12 @@ export type AssignPermissionsResponse = {
   role: UmsUserRole;
 };
 
+export type DeleteUserResponse = {
+  __typename?: 'DeleteUserResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
 export type FetchUsersResponse = {
   __typename?: 'FetchUsersResponse';
   totalCount: Scalars['Int']['output'];
@@ -31,6 +37,7 @@ export type FetchUsersResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   umsAssignPermission?: Maybe<AssignPermissionsResponse>;
+  umsDeleteUser?: Maybe<DeleteUserResponse>;
   umsLoginWithEmail?: Maybe<UmsLoginResponse>;
   umsSignUpWithEmail?: Maybe<UmsSignUpResponse>;
 };
@@ -38,6 +45,11 @@ export type Mutation = {
 
 export type MutationUmsAssignPermissionArgs = {
   input: UmsAssignPermsInput;
+};
+
+
+export type MutationUmsDeleteUserArgs = {
+  input: UmsDeleteUserInput;
 };
 
 
@@ -70,6 +82,10 @@ export type UmsAssignPermsInput = {
   roleAlias: UmsUserRole;
 };
 
+export type UmsDeleteUserInput = {
+  userId: Scalars['ID']['input'];
+};
+
 export type UmsGetUsersInput = {
   pagination?: InputMaybe<PaginationInput>;
   search?: InputMaybe<Scalars['String']['input']>;
@@ -82,6 +98,7 @@ export type UmsLoginInput = {
 
 export type UmsLoginResponse = {
   __typename?: 'UmsLoginResponse';
+  message?: Maybe<Scalars['String']['output']>;
   token: UmsTokens;
   user: UmsUser;
 };
@@ -104,6 +121,7 @@ export type UmsSignUpInput = {
 
 export type UmsSignUpResponse = {
   __typename?: 'UmsSignUpResponse';
+  message?: Maybe<Scalars['String']['output']>;
   token: UmsTokens;
   user: UmsUser;
 };
@@ -211,6 +229,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   AssignPermissionsResponse: ResolverTypeWrapper<AssignPermissionsResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  DeleteUserResponse: ResolverTypeWrapper<DeleteUserResponse>;
   FetchUsersResponse: ResolverTypeWrapper<FetchUsersResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -219,6 +238,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UmsAssignPermsInput: UmsAssignPermsInput;
+  UmsDeleteUserInput: UmsDeleteUserInput;
   UmsGetUsersInput: UmsGetUsersInput;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: ResolverTypeWrapper<UmsLoginResponse>;
@@ -234,6 +254,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   AssignPermissionsResponse: AssignPermissionsResponse;
   Boolean: Scalars['Boolean']['output'];
+  DeleteUserResponse: DeleteUserResponse;
   FetchUsersResponse: FetchUsersResponse;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -242,6 +263,7 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars['String']['output'];
   UmsAssignPermsInput: UmsAssignPermsInput;
+  UmsDeleteUserInput: UmsDeleteUserInput;
   UmsGetUsersInput: UmsGetUsersInput;
   UmsLoginInput: UmsLoginInput;
   UmsLoginResponse: UmsLoginResponse;
@@ -257,6 +279,12 @@ export type AssignPermissionsResponseResolvers<ContextType = any, ParentType ext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeleteUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeleteUserResponse'] = ResolversParentTypes['DeleteUserResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FetchUsersResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FetchUsersResponse'] = ResolversParentTypes['FetchUsersResponse']> = {
   totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   users?: Resolver<Array<ResolversTypes['UmsUser']>, ParentType, ContextType>;
@@ -265,6 +293,7 @@ export type FetchUsersResponseResolvers<ContextType = any, ParentType extends Re
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   umsAssignPermission?: Resolver<Maybe<ResolversTypes['AssignPermissionsResponse']>, ParentType, ContextType, RequireFields<MutationUmsAssignPermissionArgs, 'input'>>;
+  umsDeleteUser?: Resolver<Maybe<ResolversTypes['DeleteUserResponse']>, ParentType, ContextType, RequireFields<MutationUmsDeleteUserArgs, 'input'>>;
   umsLoginWithEmail?: Resolver<Maybe<ResolversTypes['UmsLoginResponse']>, ParentType, ContextType, RequireFields<MutationUmsLoginWithEmailArgs, 'input'>>;
   umsSignUpWithEmail?: Resolver<Maybe<ResolversTypes['UmsSignUpResponse']>, ParentType, ContextType, RequireFields<MutationUmsSignUpWithEmailArgs, 'input'>>;
 };
@@ -274,12 +303,14 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type UmsLoginResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsLoginResponse'] = ResolversParentTypes['UmsLoginResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   token?: Resolver<ResolversTypes['UmsTokens'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['UmsUser'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UmsSignUpResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UmsSignUpResponse'] = ResolversParentTypes['UmsSignUpResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   token?: Resolver<ResolversTypes['UmsTokens'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['UmsUser'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -311,6 +342,7 @@ export type UmsUserResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type Resolvers<ContextType = any> = {
   AssignPermissionsResponse?: AssignPermissionsResponseResolvers<ContextType>;
+  DeleteUserResponse?: DeleteUserResponseResolvers<ContextType>;
   FetchUsersResponse?: FetchUsersResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

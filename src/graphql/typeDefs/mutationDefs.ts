@@ -6,6 +6,7 @@ const mutationDefs = gql`
     umsLoginWithEmail(input: UmsLoginInput!): UmsLoginResponse
 
     umsAssignPermission(input: UmsAssignPermsInput!): AssignPermissionsResponse
+    umsDeleteUser(input: UmsDeleteUserInput!): DeleteUserResponse
   }
 `;
 

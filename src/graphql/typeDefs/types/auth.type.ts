@@ -31,11 +31,13 @@ const authDefs = gql`
   type UmsLoginResponse {
     user: UmsUser!
     token: UmsTokens!
+    message: String
   }
 
   type UmsSignUpResponse {
     user: UmsUser!
     token: UmsTokens!
+    message: String
   }
 
   input UmsSignUpInput {
@@ -68,16 +70,6 @@ const authDefs = gql`
   type AssignPermissionsResponse {
     permissions: [UmsPermissions!]!
     role: UmsUserRole!
-  }
-
-  type FetchUsersResponse {
-    users: [UmsUser!]!
-    totalCount: Int!
-  }
-
-  input UmsGetUsersInput {
-    pagination: PaginationInput
-    search: String
   }
 `;
 

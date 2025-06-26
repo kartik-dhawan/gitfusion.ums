@@ -1,8 +1,7 @@
 import mutationDefs from "./mutationDefs.ts";
 import queryDefs from "./queryDefs.ts";
-import authDefs from "./types/auth.type.ts";
-import commonDefs from "./types/common.type.ts";
+import { authDefs, commonDefs, userDefs } from "./types/index.ts";
 
-const typeDefs = [mutationDefs, queryDefs, authDefs, commonDefs];
+const typeDefs = [mutationDefs, queryDefs, authDefs, commonDefs, userDefs];
 
 export default typeDefs;
