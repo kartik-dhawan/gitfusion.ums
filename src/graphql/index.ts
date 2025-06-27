@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import typeDefs from "./typeDefs/index.ts";
 import resolvers from "./resolvers/index.ts";
 import { buildSubgraphSchema } from "@apollo/subgraph";
+import { fetchUserById } from "./actions/user.ts";
 
 const PORT = process.env.PORT ?? 4001; // Setting the port from environment variable or defaulting to 3002
 
@@ -31,7 +32,31 @@ const startServer = async () => {
     await server.start();
 
     // Setting up the GraphQL endpoint with middleware
-    app.use("/graphql", expressMiddleware(server));
+    app.use(
+      "/graphql",
+      expressMiddleware(server, {
+        context: async (params) => {
+          const { req, res } = params;
+
+          // get token & userID from headers (passed from gateway)
+          const authToken = req.headers.authorization;
+          const userId = req.headers["x-user-id"];
+
+          let userContext;
+
+          if (authToken) {
+            // if user & token both exists, fetch user details & set it in context
+            if (userId) userContext = await fetchUserById(userId as string);
+          }
+
+          return {
+            req,
+            res,
+            user: userContext,
+          };
+        },
+      })
+    );
 
     app.listen(PORT, () => {
       logger.common.info(
